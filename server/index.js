@@ -10,6 +10,12 @@ const sessionStore = new SequelizeStore({db})
 const PORT = process.env.PORT || 8080
 const app = express()
 const socketio = require('socket.io')
+const cloudinary = require('cloudinary')
+const formData = require('express-form-data')
+const cors = require('cors')
+const multer = require('multer')
+const storage = multer.memoryStorage()
+const multerUploads = multer({storage}).single('image')
 module.exports = app
 
 // This is a global Mocha hook, used for resource cleanup.
@@ -27,6 +33,14 @@ if (process.env.NODE_ENV === 'test') {
  * Node process on process.env
  */
 if (process.env.NODE_ENV !== 'production') require('../secrets')
+
+app.use(
+  cors({
+    origin: 'http://localhost:3000'
+  })
+)
+
+app.use(formData.parse())
 
 // passport registration
 passport.serializeUser((user, done) => done(null, user.id))
