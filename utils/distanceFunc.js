@@ -42,7 +42,7 @@ console.log(
 )
 
 const getD3InputArray = gpxString => {
-  parseGpxP(gpxString)
+  return parseGpxP(gpxString)
     .then(data => {
       let inputArray = []
       let accumDistance = 0
@@ -55,8 +55,8 @@ const getD3InputArray = gpxString => {
               prevPoint = [subsegment.lat, subsegment.lon, subsegment.elevation]
               let trackPoint = {
                 elevation: getMeters(subsegment.elevation),
-                distance: 0,
-                time: subsegment.time
+                distance: 0
+                // time: subsegment.time
               }
               inputArray.push(trackPoint)
             } else {
@@ -69,8 +69,8 @@ const getD3InputArray = gpxString => {
               ])
               let trackPoint = {
                 elevation: getMeters(subsegment.elevation),
-                distance: accumDistance,
-                time: subsegment.time
+                distance: accumDistance / 1000
+                // time: subsegment.time
               }
               prevPoint = [subsegment.lat, subsegment.lon, subsegment.elevation]
               inputArray.push(trackPoint)
@@ -78,7 +78,7 @@ const getD3InputArray = gpxString => {
           })
         )
       })
-      console.dir(inputArray)
+
       return inputArray
     })
     .catch(error => {

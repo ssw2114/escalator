@@ -111,7 +111,7 @@ class Gpx {
             return trackSegment.trkpt
           }
 
-          return
+          
         })
       }
     })
