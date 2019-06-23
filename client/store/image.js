@@ -24,12 +24,14 @@ const gotImages = payload => ({type: GET_IMAGES, payload})
 export const loadImagesThunk = formData => async dispatch => {
   try {
     console.log('LOAD IMAGES THUNK DISPATCHED.  formData:', formData)
+    console.dir('formdata:', formData)
     const res = await axios.post('api/images/upload', formData)
     dispatch(gotImages(res.data))
   } catch (err) {
     console.error(err)
   }
 }
+
 
 /**
  * REDUCER

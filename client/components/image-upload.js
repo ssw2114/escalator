@@ -6,36 +6,51 @@ import EXIF from 'exif-js'
 class ImageUpload extends Component {
   onChange = e => {
     e.preventDefault()
-    const errs = []
     const photos = Array.from(e.target.files)
     let formData = new FormData()
-    const types = ['image/png', 'image/jpeg', 'image/gif']
+    // console.log('FIRST FILE:', photos[0])
 
     photos.forEach((file, i) => {
-      //error checks
-      if (types.every(type => file.type !== type)) {
-        errs.push(`'${file.type}' is not a supported format`)
-      }
-      if (file.size > 150000) {
-        errs.push(`'${file.name}' is too large, please pick a smaller file`)
-      }
-      let name = i.toString()
-      EXIF.getData(file, function() {
-        console.log('EXIF:', EXIF.getAllTags(this))
-
-        //DateTimeOriginal or DateTime
-      })
-      formData.append(name, file)
+      formData.append(i, file)
     })
-    console.log(formData.getAll('0'))
-    console.dir(formData)
+
     this.props.loadImages(formData)
+
+    // let headers = new Headers()
+    // headers.append(
+    //   'Authorization',
+    //   'Basic ' + btoa('723314166911458:8-yXh5UHr7jf1Xqu01urqE4KhmU')
+    // )
+    // fetch(`https://api.cloudinary.com/v1_1/di6e6irfj/image/upload`, {
+    //   headers: headers,
+    //   method: 'POST',
+    //   body: formData,
+    //   credentials: 'include'
+    // })
+    //   .then(res => {
+    //     console.log('CLOUD RESPONSE:', res)
+    //   })
+    //   .catch(err => console.log(err))
+    // let promises = photos.forEach((file, i) => {
+    //   return EXIFP(file).then()
+    // }
+
+    // await photos.forEach(async (file, i) => {
+    //   await EXIF.getData(file, async function() {
+    //     let time = await EXIF.getTag(this, 'DateTimeOriginal')
+    //     file.time = time
+    //     let name = i.toString()
+    //     console.log('post-exif file', file)
+    //     formData.append(name, file)
+    //   })
+    // })
   }
+
   render() {
     return (
       <div>
         <label>Upload Photo</label>
-        <input type="file" onChange={this.onChange} />
+        <input type="file" onChange={this.onChange} multiple />
       </div>
     )
   }

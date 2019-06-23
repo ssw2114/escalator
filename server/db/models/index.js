@@ -1,5 +1,6 @@
 const User = require('./user')
 const Image = require('./image')
+const Gpx = require('./gpx')
 
 /**
  * If we had any associations to make, this would be a great place to put them!
@@ -16,5 +17,6 @@ const Image = require('./image')
  */
 module.exports = {
   User,
-  Image
+  Image,
+  Gpx
 }

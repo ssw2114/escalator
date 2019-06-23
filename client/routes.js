@@ -7,7 +7,8 @@ import {
   Signup,
   UserHome,
   ImageUpload,
-  ElevationChart
+  ElevationChart,
+  GpxUpload
 } from './components'
 import {me} from './store'
 
@@ -29,6 +30,7 @@ class Routes extends Component {
         <Route path="/login" component={Login} />
         <Route path="/signup" component={Signup} />
         <Route path="/image" component={ImageUpload} />
+        <Route path="/gpx" component={GpxUpload} />
         {isLoggedIn && (
           <Switch>
             {/* Routes placed here are only available after logging in */}

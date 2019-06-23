@@ -2,7 +2,7 @@ const Sequelize = require('sequelize')
 const db = require('../db')
 
 const Image = db.define('image', {
-  timestamp: {
+  time: {
     type: Sequelize.DATE,
     allowNull: false
   },

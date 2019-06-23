@@ -15,7 +15,6 @@ const formData = require('express-form-data')
 const cors = require('cors')
 const multer = require('multer')
 const storage = multer.memoryStorage()
-const multerUploads = multer({storage}).single('image')
 module.exports = app
 
 // This is a global Mocha hook, used for resource cleanup.

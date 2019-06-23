@@ -110,8 +110,6 @@ class Gpx {
             parseDate(trackSegment.trkpt)
             return trackSegment.trkpt
           }
-
-          
         })
       }
     })
