@@ -1,7 +1,6 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {loadImagesThunk} from '../store/image'
-import EXIF from 'exif-js'
 
 class ImageUpload extends Component {
   onChange = e => {

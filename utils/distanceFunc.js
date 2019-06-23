@@ -3,22 +3,6 @@ const util = require('util')
 const parseGpxP = util.promisify(gpxParse.parseGpx)
 const sampleData = require('../data/sampleData3')
 
-//take GPX string and return d3 input of line graphed over distance(km) by elevation(meters)
-
-// let image = {
-//   imageUrl:
-//     'https://www.city.sendai.jp/zoo/saishin/documents/images/ressaapanda_konatsu_nikoniko700px.jpg'
-// }
-// gpxParse.parseGpx(sampleData, (error, data) => {
-//   image.time = data.tracks[0].segments[0][1].time
-//   // console.log(data.tracks[0].segments[0][1])
-//   // console.log(data.tracks[0].segments[0][0].lat)
-//   // console.log(data.tracks[0].length())
-//   // console.log(data.routes.points)
-// })
-
-// console.log('IMAGE OBJ:', image)
-
 //feet to meters helper
 
 const getMeters = feet => {
@@ -44,45 +28,43 @@ const getDistance = (polar1, polar2) => {
   return Math.hypot(x1 - x2, y1 - y2, z1 - z2)
 }
 
-console.log(
-  getDistance([47.11876, -70.89040833, 387.0], [47.11177, -70.91567667, 503])
-)
-
-const findTrackpoint = (date, points) => {
-  let mid = Math.floor(points.length / 2)
-  if (mid === 0) {
-    return points[0]
-  }
-  if (date.getTime() === points[mid].time.getTime()) {
-    return points[mid]
-  }
-  if (date < points[mid].time) {
-    return findTrackpoint(date, points.slice(0, mid))
-  }
-  return findTrackpoint(date, points.slice(mid + 1, points.length))
-}
-
-// const findTrackpointByIndex = (
-//   date,
-//   points,
-//   start = 0,
-//   end = points.length - 1
-// ) => {
-//   let mid = Math.floor((end + 1 - start) / 2)
-//   if (start === end) {
-//     return points[start]
+// const findTrackpoint = (image, points) => {
+//   let mid = Math.floor(points.length / 2)
+//   let imgTime = new Date(image.time)
+//   if (mid === 0) {
+//     return 0
 //   }
-//   if (date.getTime() === points[mid].time.getTime()) {
-//     return points[mid]
+//   if (imgTime.getTime() === new Date(points[mid].time).getTime()) {
+//     return mid
 //   }
-//   if (date < points[mid].time) {
-//     return findTrackpoint(date, points, 0, mid - 1)
-//   } else {
-//     return findTrackpoint(date, points, mid + 1, points.length - 1)
+//   if (imgTime < new Date(points[mid].time)) {
+//     return findTrackpoint(image, points.slice(0, mid))
 //   }
+//   return findTrackpoint(image, points.slice(mid + 1, points.length))
 // }
 
-const getD3InputArray = (gpxString, imageArray = []) => {
+const findTrackpoint = (image, points, start = 0, end = points.length - 1) => {
+  let imgTime = new Date(image.time)
+  let mid = start + Math.ceil((end - start) / 2)
+  const imageTooEarly = imgTime < new Date(points[0].time)
+  const imageTooLate = new Date(points[points.length - 1].time) < imgTime
+  if (imageTooEarly || imageTooLate) {
+    return -1
+  }
+  if (start === end) {
+    return start
+  }
+  if (imgTime.getTime() === new Date(points[mid].time).getTime()) {
+    return mid
+  }
+  if (imgTime < new Date(points[mid].time)) {
+    return findTrackpoint(image, points, start, mid - 1)
+  } else {
+    return findTrackpoint(image, points, mid + 1, end)
+  }
+}
+
+const getD3InputArray = (gpxString, imageArray) => {
   return parseGpxP(gpxString)
     .then(data => {
       let inputArray = []
@@ -122,13 +104,24 @@ const getD3InputArray = (gpxString, imageArray = []) => {
       //add imageUrl to relevant trackpoint
 
       imageArray.forEach(image => {
-        let pointWithImage = findTrackpoint(image.time, inputArray)
-        pointWithImage.imageUrl = image.imageUrl
-        console.log(pointWithImage)
-        console.log('INDEX OF POINT', inputArray.indexOf(pointWithImage))
-        let indexOfPoint = inputArray.indexOf(pointWithImage)
-        for (let i = indexOfPoint + 1; i < indexOfPoint + 51; i++) {
-          inputArray[i].imageUrl = image.imageUrl
+        let pointIdx = findTrackpoint(image, inputArray)
+        if (pointIdx < 0) {
+          return
+        }
+
+        inputArray[pointIdx].imageUrl = image.imageUrl
+
+        console.log(`pointIdx: ${pointIdx}`)
+        for (
+          let i = pointIdx + 1;
+          i < Math.min(pointIdx + 50, inputArray.length);
+          i++
+        ) {
+          if (!inputArray[i].imageUrl) {
+            inputArray[i].imageUrl = image.imageUrl
+            console.log('ADDING IMG URL', image.imageUrl)
+            console.dir(inputArray[i])
+          }
         }
       })
       return inputArray

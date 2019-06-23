@@ -2,6 +2,7 @@ import axios from 'axios'
 
 let initialState = {
   gpx: '',
+  trips: [],
   loading: true,
   gpxLoaded: false
 }
@@ -9,20 +10,35 @@ let initialState = {
 //actions
 
 const GET_GPX = 'GET_GPX'
+const GET_TRIPS = 'GET_TRIPS'
 const GPX_LOADED = 'GPX_LOADED'
 
 //action creators
 
 const gotGpx = payload => ({
-  action: GET_GPX,
+  type: GET_GPX,
+  payload
+})
+
+const gotTrips = payload => ({
+  type: GET_TRIPS,
   payload
 })
 
 const loadedGpx = () => ({
-  action: GPX_LOADED
+  type: GPX_LOADED
 })
 
 //thunks
+
+export const getTripsThunk = () => async dispatch => {
+  try {
+    const {data} = await axios.get('api/gpx')
+    dispatch(gotTrips(data))
+  } catch (err) {
+    console.error('loadGPXThunk error:', err)
+  }
+}
 
 export const loadGpxThunk = (string, id, seq) => async dispatch => {
   try {
@@ -37,7 +53,7 @@ export const loadGpxThunk = (string, id, seq) => async dispatch => {
 
 export const getGpxThunk = id => async dispatch => {
   try {
-    const {data} = await axios.get(`api/gpx/:${id}`)
+    const {data} = await axios.get(`api/gpx/${id}`)
     dispatch(gotGpx(data))
   } catch (err) {
     console.error('getGpxThunk error:', err)
@@ -49,7 +65,9 @@ export default function(state = initialState, action) {
     case GET_GPX:
       return {...state, loading: false, gpx: action.payload}
     case GPX_LOADED:
-      return {...state, gpxLoaded: true}
+      return {...state, gpxLoaded: true, loading: false}
+    case GET_TRIPS:
+      return {...state, trips: action.payload, loading: false}
     default:
       return state
   }

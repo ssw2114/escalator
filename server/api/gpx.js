@@ -1,5 +1,19 @@
 const router = require('express').Router()
 const Gpx = require('../db/models/gpx')
+const db = require('../db')
+const Sequelize = require('sequelize')
+
+router.get('/', async (req, res, next) => {
+  try {
+    let results = await db.query('SELECT DISTINCT "uniqueId" FROM "gpxes"', {
+      type: Sequelize.QueryTypes.SELECT
+    })
+    let array = results.map(id => id.uniqueId)
+    res.json(array)
+  } catch (error) {
+    next(error)
+  }
+})
 
 router.get('/:id', async (req, res, next) => {
   try {

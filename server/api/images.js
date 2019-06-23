@@ -40,7 +40,17 @@ router.use(
 
 router.use(formData.parse())
 
-router.post('/upload', (req, res, next) => {
+router.get('/', async (req, res, next) => {
+  try {
+    const images = await Image.findAll()
+    res.json(images)
+
+    //SSW: consider limiting by timeframe of trip
+  } catch (error) {
+    next(error)
+  }
+})
+router.post('/', (req, res, next) => {
   // console.log('REQ FILES', JSON.stringify(req.files))
   const values = Object.values(req.files)
 
@@ -53,7 +63,7 @@ router.post('/upload', (req, res, next) => {
     console.log('RESULT', result)
     let time = result.tags.DateTimeOriginal
     console.log('TIME1', time)
-    time = new Date(time * 1000)
+    time = new Date(time)
     console.log('TIME2', time)
     // console.log('EXIF', result)
     return cloudinary.uploader.upload(image.path).then(cloudRes => {
