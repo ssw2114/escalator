@@ -110,7 +110,7 @@ const drawGraph = props => {
         .append('circle')
         .attr('class', 'y')
         .style('fill', 'none')
-        .style('stroke', 'blue')
+        .style('stroke', 'red')
         .attr('r', 4)
       // focus.append('image')
 
@@ -154,7 +154,7 @@ const drawGraph = props => {
                 'translate(' +
                   x(d.distance) +
                   ',' +
-                  y(d.elevation) +
+                  y(d.elevation + 100) +
                   ') rotate(90)'
               )
           } else if (d.orientation === 8) {
@@ -165,15 +165,26 @@ const drawGraph = props => {
                 'translate(' +
                   x(d.distance) +
                   ',' +
-                  y(d.elevation) +
+                  y(d.elevation + 100) +
                   ') rotate(270)'
+              )
+          } else if (d.orientation === 3) {
+            focus
+              .select('image')
+              .attr(
+                'transform',
+                'translate(' +
+                  x(d.distance) +
+                  ',' +
+                  y(d.elevation + 100) +
+                  ') rotate(180)'
               )
           } else {
             focus
               .select('image')
               .attr(
                 'transform',
-                'translate(' + x(d.distance) + ',' + y(d.elevation + 92) + ')'
+                'translate(' + x(d.distance) + ',' + y(d.elevation + 100) + ')'
               )
           }
 

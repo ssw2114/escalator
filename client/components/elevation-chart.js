@@ -23,7 +23,12 @@ class ElevationChart extends Component {
   }
 
   render() {
-    return <div className="chart" />
+    return (
+      <div>
+        <h1>{this.props.location}</h1>
+        <div className="chart" />
+      </div>
+    )
   }
 }
 
@@ -32,7 +37,8 @@ const mapState = state => {
     gpxString: state.gpx.gpx,
     gpxLoading: state.gpx.loading,
     images: state.image.images,
-    imagesLoading: state.image.loading
+    imagesLoading: state.image.loading,
+    location: state.gpx.location
   }
 }
 

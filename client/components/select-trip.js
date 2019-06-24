@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
-import {getTripsThunk, getGpxThunk} from '../store/gpx'
+import {getTripsThunk, getGpxThunk, getLocationAction} from '../store/gpx'
 import {getImagesThunk} from '../store/image'
 
 //show trips by unique id
@@ -16,9 +16,10 @@ class SelectTrip extends Component {
   //     this.props.getTrips()
   //   }
   // }
-  loadGpxString(id) {
+  loadGpxString(id, location) {
     this.props.getGpx(id)
     this.props.getImages()
+    this.props.getLocation(location)
   }
 
   render() {
@@ -26,18 +27,20 @@ class SelectTrip extends Component {
       <div>Loading...</div>
     ) : (
       <div>
-        <h1>Select a Trip: </h1>
-        {this.props.trips.map(trip => (
-          <div>
-            <Link
-              to="/chart"
-              key={trip.id}
-              onClick={() => this.loadGpxString(trip.uniqueId)}
-            >
-              {trip.location}
-            </Link>
-          </div>
-        ))}
+        <h1>Select a Trip </h1>
+        <ul>
+          {this.props.trips.map(trip => (
+            <li>
+              <Link
+                to="/chart"
+                key={trip.id}
+                onClick={() => this.loadGpxString(trip.uniqueId, trip.location)}
+              >
+                {trip.location}
+              </Link>
+            </li>
+          ))}
+        </ul>
       </div>
     )
   }
@@ -52,7 +55,8 @@ const mapState = state => {
 const mapDispatch = dispatch => ({
   getTrips: () => dispatch(getTripsThunk()),
   getGpx: id => dispatch(getGpxThunk(id)),
-  getImages: () => dispatch(getImagesThunk())
+  getImages: () => dispatch(getImagesThunk()),
+  getLocation: location => dispatch(getLocationAction(location))
 })
 
 export default connect(mapState, mapDispatch)(SelectTrip)

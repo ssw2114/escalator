@@ -90,7 +90,7 @@ class ImageUpload extends Component {
     ]
     return (
       <div>
-        <label>First, select a UTC Offset:</label>
+        <label>First, select a UTC Offset</label>
         <select value={this.state.offset} onChange={this.zoneChange}>
           {offsets.map(
             (offset, idx) =>
@@ -106,7 +106,7 @@ class ImageUpload extends Component {
           )}
         </select>
 
-        <label>Next, upload images:</label>
+        <label>Next, upload images</label>
         <input type="file" onChange={this.onUpload} multiple />
       </div>
     )

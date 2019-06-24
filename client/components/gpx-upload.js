@@ -43,7 +43,7 @@ class GpxUpload extends Component {
   render() {
     return (
       <div>
-        <label>Upload Gpx File</label>
+        <label>Upload Gpx file</label>
         <input type="file" onChange={this.onChange} />
       </div>
     )

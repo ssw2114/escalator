@@ -6,13 +6,26 @@ a {
   text-decoration: none;
 }
 
+li {
+  font-size: 16pt;
+}
 label {
   display: block;
+  font-size: 16pt;
 }
 
 nav a {
   display: inline-block;
-  margin: 1em;
+  margin: 2em;
+}
+
+.header {
+  font-size: 30pt;
+  font-weight: bold;
+}
+
+.link {
+  font-size: 15pt;
 }
 
 form div {

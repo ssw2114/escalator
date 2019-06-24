@@ -4,7 +4,8 @@ let initialState = {
   gpx: '',
   trips: [],
   loading: true,
-  gpxLoaded: false
+  gpxLoaded: false,
+  location: ''
 }
 
 //actions
@@ -12,6 +13,7 @@ let initialState = {
 const GET_GPX = 'GET_GPX'
 const GET_TRIPS = 'GET_TRIPS'
 const GPX_LOADED = 'GPX_LOADED'
+const GET_LOCATION = 'GET_LOCATION'
 
 //action creators
 
@@ -29,6 +31,10 @@ const loadedGpx = () => ({
   type: GPX_LOADED
 })
 
+export const getLocationAction = location => ({
+  type: GET_LOCATION,
+  location
+})
 //thunks
 
 export const getTripsThunk = () => async dispatch => {
@@ -53,7 +59,10 @@ export const loadGpxThunk = (string, id, seq) => async dispatch => {
         `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`
       )
       console.log('REVERSEGEO', reverseGeo)
-      location = reverseGeo.data.address.state
+      let data = reverseGeo.data.address
+      location = `${data.village}, ${data.county}, ${data.state}, ${
+        data.country
+      }`
     }
 
     const res = await axios.post('api/gpx', {string, id, seq, location})
@@ -80,6 +89,8 @@ export default function(state = initialState, action) {
       return {...state, loading: false, gpx: action.payload}
     case GPX_LOADED:
       return {...state, gpxLoaded: true, loading: false}
+    case GET_LOCATION:
+      return {...state, location: action.location, loading: false}
     case GET_TRIPS:
       return {...state, trips: action.payload, loading: false}
     default:

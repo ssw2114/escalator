@@ -2,7 +2,6 @@ const gpxParse = require('gpx-parse')
 const util = require('util')
 const parseGpxP = util.promisify(gpxParse.parseGpx)
 
-
 //feet to meters helper
 
 const getMeters = feet => {
@@ -46,7 +45,7 @@ const getDistance = (polar1, polar2) => {
 let counter = 0
 
 const findTrackpoint = (image, points, start = 0, end = points.length - 1) => {
-  console.log('start: ', start, 'end: ', end)
+  // console.log('start: ', start, 'end: ', end)
   let imgTime = new Date(image.time)
   let mid = start + Math.floor((end - start) / 2)
   const imageTooEarly = imgTime < new Date(points[0].time)
@@ -107,6 +106,11 @@ const getD3InputArray = (gpxString, imageArray) => {
       })
       //add imageUrl to relevant trackpoint
 
+      const spreadScale = Math.floor(inputArray.length / 100)
+      console.log(
+        `spreadScale: ${spreadScale}, arraylength: ${inputArray.length}`
+      )
+
       imageArray.forEach(image => {
         let pointIdx = findTrackpoint(image, inputArray)
         if (pointIdx < 0) {
@@ -115,12 +119,6 @@ const getD3InputArray = (gpxString, imageArray) => {
 
         inputArray[pointIdx].imageUrl = image.imageUrl
         inputArray[pointIdx].orientation = image.orientation
-        const spreadScale = Math.floor(5 * inputArray.length / 1000)
-        console.log(
-          `pointIdx: ${pointIdx}, spreadScale: ${spreadScale}, arraylength: ${
-            inputArray.length
-          }`
-        )
         for (
           let i = pointIdx + 1;
           i < Math.min(pointIdx + spreadScale, inputArray.length);
@@ -129,8 +127,6 @@ const getD3InputArray = (gpxString, imageArray) => {
           if (!inputArray[i].imageUrl) {
             inputArray[i].imageUrl = image.imageUrl
             inputArray[i].orientation = image.orientation
-            console.log('ADDING IMG URL', image.imageUrl)
-            console.dir(inputArray[i])
           }
         }
       })
