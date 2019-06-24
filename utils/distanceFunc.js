@@ -1,7 +1,7 @@
 const gpxParse = require('gpx-parse')
 const util = require('util')
 const parseGpxP = util.promisify(gpxParse.parseGpx)
-const sampleData = require('../data/sampleData3')
+
 
 //feet to meters helper
 
@@ -43,20 +43,24 @@ const getDistance = (polar1, polar2) => {
 //   return findTrackpoint(image, points.slice(mid + 1, points.length))
 // }
 
+let counter = 0
+
 const findTrackpoint = (image, points, start = 0, end = points.length - 1) => {
+  console.log('start: ', start, 'end: ', end)
   let imgTime = new Date(image.time)
-  let mid = start + Math.ceil((end - start) / 2)
+  let mid = start + Math.floor((end - start) / 2)
   const imageTooEarly = imgTime < new Date(points[0].time)
   const imageTooLate = new Date(points[points.length - 1].time) < imgTime
   if (imageTooEarly || imageTooLate) {
     return -1
   }
-  if (start === end) {
+  if (start === mid || end === mid) {
     return start
   }
   if (imgTime.getTime() === new Date(points[mid].time).getTime()) {
     return mid
   }
+
   if (imgTime < new Date(points[mid].time)) {
     return findTrackpoint(image, points, start, mid - 1)
   } else {
@@ -110,15 +114,21 @@ const getD3InputArray = (gpxString, imageArray) => {
         }
 
         inputArray[pointIdx].imageUrl = image.imageUrl
-
-        console.log(`pointIdx: ${pointIdx}`)
+        inputArray[pointIdx].orientation = image.orientation
+        const spreadScale = Math.floor(5 * inputArray.length / 1000)
+        console.log(
+          `pointIdx: ${pointIdx}, spreadScale: ${spreadScale}, arraylength: ${
+            inputArray.length
+          }`
+        )
         for (
           let i = pointIdx + 1;
-          i < Math.min(pointIdx + 50, inputArray.length);
+          i < Math.min(pointIdx + spreadScale, inputArray.length);
           i++
         ) {
           if (!inputArray[i].imageUrl) {
             inputArray[i].imageUrl = image.imageUrl
+            inputArray[i].orientation = image.orientation
             console.log('ADDING IMG URL', image.imageUrl)
             console.dir(inputArray[i])
           }

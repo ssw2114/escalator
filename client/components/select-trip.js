@@ -27,14 +27,14 @@ class SelectTrip extends Component {
     ) : (
       <div>
         <h1>Select a Trip: </h1>
-        {this.props.trips.map(tripId => (
+        {this.props.trips.map(trip => (
           <div>
             <Link
               to="/chart"
-              key={tripId}
-              onClick={() => this.loadGpxString(tripId)}
+              key={trip.id}
+              onClick={() => this.loadGpxString(trip.uniqueId)}
             >
-              {tripId}
+              {trip.location}
             </Link>
           </div>
         ))}

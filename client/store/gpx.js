@@ -42,7 +42,21 @@ export const getTripsThunk = () => async dispatch => {
 
 export const loadGpxThunk = (string, id, seq) => async dispatch => {
   try {
-    const res = await axios.post('api/gpx', {string, id, seq})
+    //if seq is one, get location
+    //regex search for lat and lon
+    let location = ''
+    if (seq === 1) {
+      const [_, lat, lon] = string.match(
+        /trkpt lat="([-.\d]+)" lon="([-.\d]+)"/
+      )
+      const reverseGeo = await axios.get(
+        `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`
+      )
+      console.log('REVERSEGEO', reverseGeo)
+      location = reverseGeo.data.address.state
+    }
+
+    const res = await axios.post('api/gpx', {string, id, seq, location})
     if (res.status === 200) {
       dispatch(loadedGpx())
     }

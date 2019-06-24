@@ -1,14 +1,15 @@
 import * as d3 from 'd3'
+import EXIF from 'exif-js'
+
 const {getD3InputArray} = require('../../utils/distanceFunc')
 //props will be GpxString and images (array of objects with imageURL and timestamp)
 const drawGraph = props => {
   getD3InputArray(props.gpxString, props.images)
     .then(data => {
       d3.select('.chart > *').remove()
-      console.log('data', data)
-      const margin = {top: 40, right: 40, bottom: 40, left: 40}
+      const margin = {top: 100, right: 40, bottom: 40, left: 40}
       const width = 960 - margin.left - margin.right
-      const height = 500 - margin.top - margin.bottom
+      const height = 600 - margin.top - margin.bottom
 
       //calculate domain ranges
       const distanceMax = data[data.length - 1].distance
@@ -131,24 +132,66 @@ const drawGraph = props => {
 
       function mousemove() {
         focus.select('image').remove()
+        focus.select('.x').remove()
         let x0 = x.invert(d3.mouse(this)[0])
         let i = bisectDistance(data, x0, 1)
         let d0 = data[i - 1]
         let d1 = data[i]
         let d = x0 - d0.distance > d1.distance - x0 ? d1 : d0
-        console.log('THIS IS d', d)
+
         if (d.imageUrl) {
-          console.log('IMG URL EXISTS FOR THIS POINT')
           focus
             .append('image')
             .attr('xlink:href', d.imageUrl)
-            .attr('width', '200')
-            .attr('height', '200')
+            .attr('image-orientation', 'from-image')
+            .attr('width', '300')
+            .attr('height', '300')
+          if (d.orientation === 6) {
+            focus
+              .select('image')
+              .attr(
+                'transform',
+                'translate(' +
+                  x(d.distance) +
+                  ',' +
+                  y(d.elevation) +
+                  ') rotate(90)'
+              )
+          } else if (d.orientation === 8) {
+            focus
+              .select('image')
+              .attr(
+                'transform',
+                'translate(' +
+                  x(d.distance) +
+                  ',' +
+                  y(d.elevation) +
+                  ') rotate(270)'
+              )
+          } else {
+            focus
+              .select('image')
+              .attr(
+                'transform',
+                'translate(' + x(d.distance) + ',' + y(d.elevation + 92) + ')'
+              )
+          }
+
+          // append the x line
+          focus
+            .append('line')
+            .attr('class', 'x')
+            .style('stroke', 'blue')
+            .style('stroke-dasharray', '3,3')
+            .style('opacity', 0.5)
+            .attr('y1', 0)
+            .attr('y2', height)
+            // .select('.x')
             .attr(
               'transform',
               'translate(' + x(d.distance) + ',' + y(d.elevation) + ')'
             )
-          console.log('d.imageUrl', d)
+            .attr('y2', height - y(d.elevation))
         }
         focus
           .select('circle.y')

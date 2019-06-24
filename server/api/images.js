@@ -6,30 +6,14 @@ const Image = require('../db/models/image')
 const Gpx = require('../db/models/gpx')
 const EXIFParser = require('exif-parser')
 const fs = require('fs')
-
-// const getEXIFData = image => {
-//   return new Promise(fulfill => {
-//     EXIF.getData(image, function() {
-//       fulfill(this)
-//     })
-//   })
-// }
-
-// const multer = require('multer')
-// const storage = multer.memoryStorage()
-// const multerUploads = multer({storage}).single('image')
 require('../../secrets')
 
-// cloudinary.config({
-//   cloud_name: process.env.CLOUDINARY_NAME,
-//   api_key: process.env.CLOUDINARY_KEY,
-//   api_secret: process.env.CLOUDNARY_SECRET
-// })
+//helper to convert timezone
 
 cloudinary.config({
-  cloud_name: 'di6e6irfj',
-  api_key: '723314166911458',
-  api_secret: '8-yXh5UHr7jf1Xqu01urqE4KhmU'
+  cloud_name: process.env.CLOUDINARY_NAME,
+  api_key: process.env.CLOUDINARY_KEY,
+  api_secret: process.env.CLOUDINARY_SECRET
 })
 
 router.use(
@@ -50,7 +34,7 @@ router.get('/', async (req, res, next) => {
     next(error)
   }
 })
-router.post('/', (req, res, next) => {
+router.post('/:offset', (req, res, next) => {
   // console.log('REQ FILES', JSON.stringify(req.files))
   const values = Object.values(req.files)
 
@@ -61,28 +45,28 @@ router.post('/', (req, res, next) => {
     let parser = EXIFParser.create(buffer)
     let result = parser.parse()
     console.log('RESULT', result)
+    let orientation = result.tags.Orientation
+    console.log('ORIENTATION', orientation)
     let time = result.tags.DateTimeOriginal
-    console.log('TIME1', time)
-    time = new Date(time)
+    console.log('TIME1', time, 'Type:', typeof time)
+    //specify given timezone
+    const withTimeZone = time.toString() + req.params.offset.toString()
+    time = new Date(withTimeZone)
+
     console.log('TIME2', time)
     // console.log('EXIF', result)
     return cloudinary.uploader.upload(image.path).then(cloudRes => {
       // console.log('cloudRes', cloudRes)
       return Image.create({
         imageUrl: cloudRes.url,
-        time: time.toUTCString()
+        time: time.toUTCString(),
+        orientation: orientation
       }).then(
         // dbResult => console.log('DB RESULT', dbResult),
         err => console.log(err)
       )
     })
   })
-  // .then(uploadResults => {
-  //   Image.create()
-  //   //update with imageUrl
-  // })
-  // .catch(error => console.log(error))
-  // })
   Promise.all(promises)
     .then(results => {
       console.log(results)

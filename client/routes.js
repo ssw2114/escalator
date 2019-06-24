@@ -33,14 +33,6 @@ class Routes extends Component {
         <Route path="/image" component={ImageUpload} />
         <Route path="/gpx" component={GpxUpload} />
         <Route path="/selectTrip" component={SelectTrip} />
-        {isLoggedIn && (
-          <Switch>
-            {/* Routes placed here are only available after logging in */}
-            <Route path="/home" component={UserHome} />
-          </Switch>
-        )}
-        {/* Displays our Login component as a fallback */}
-        <Route component={Login} />
       </Switch>
     )
   }

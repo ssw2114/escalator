@@ -48,6 +48,7 @@
     "cors": "^2.8.4",
     "d3": "^5.9.2",
     "dotenv": "^6.0.0",
+    "exif-js": "^2.3.0",
     "exif-parser": "edemaine/exif-parser#isodate",
     "express": "^4.16.4",
     "express-form-data": "^2.0.6",

@@ -5,11 +5,12 @@ const Sequelize = require('sequelize')
 
 router.get('/', async (req, res, next) => {
   try {
-    let results = await db.query('SELECT DISTINCT "uniqueId" FROM "gpxes"', {
-      type: Sequelize.QueryTypes.SELECT
-    })
-    let array = results.map(id => id.uniqueId)
-    res.json(array)
+    // let results = await db.query('SELECT DISTINCT "uniqueId" FROM "gpxes"', {
+    //   type: Sequelize.QueryTypes.SELECT
+    // })
+    let results = await Gpx.findAll({where: {sequence: 1}})
+    delete results.gpxString
+    res.json(results)
   } catch (error) {
     next(error)
   }
@@ -37,11 +38,12 @@ router.get('/:id', async (req, res, next) => {
 
 router.post('/', async (req, res, next) => {
   try {
-    const {string, id, seq} = req.body
+    const {string, id, seq, location} = req.body
     let gpxEntry = await Gpx.create({
       gpxString: string,
       uniqueId: id,
-      sequence: seq
+      sequence: seq,
+      location: location
     })
     if (gpxEntry) {
       res.json(gpxEntry)

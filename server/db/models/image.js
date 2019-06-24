@@ -8,6 +8,10 @@ const Image = db.define('image', {
   },
   imageUrl: {
     type: Sequelize.STRING
+  },
+  orientation: {
+    type: Sequelize.INTEGER,
+    default: 1
   }
 })
 

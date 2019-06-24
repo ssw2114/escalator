@@ -1,4 +1,5 @@
 const router = require('express').Router()
+require('../../secrets')
 module.exports = router
 
 router.use('/users', require('./users'))

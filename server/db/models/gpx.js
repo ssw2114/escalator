@@ -13,6 +13,10 @@ const Gpx = db.define('gpx', {
   sequence: {
     type: Sequelize.INTEGER,
     allowNull: false
+  },
+  location: {
+    type: Sequelize.STRING,
+    default: ''
   }
 })
 

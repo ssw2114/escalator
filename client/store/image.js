@@ -22,11 +22,11 @@ const gotImages = payload => ({type: GET_IMAGES, payload})
 /**
  * THUNK CREATORS
  */
-export const loadImagesThunk = formData => async dispatch => {
+export const loadImagesThunk = (formData, offset) => async dispatch => {
   try {
-    console.log('LOAD IMAGES THUNK DISPATCHED.  formData:', formData)
+    console.log('LOAD IMAGES THUNK DISPATCHED.  offset:', offset)
     console.dir('formdata:', formData)
-    const res = await axios.post('api/images', formData)
+    const res = await axios.post(`api/images/${offset}`, formData)
   } catch (err) {
     console.error(err)
   }

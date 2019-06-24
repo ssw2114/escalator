@@ -1,17 +1,16 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {loadGpxThunk} from '../store'
-const {getD3InputArray} = require('../../utils/distanceFunc')
-// const createDataArray = require('../../data/gpx-parser')
-const gpxParse = require('gpx-parse')
 
 class GpxUpload extends Component {
   onChange = e => {
     e.preventDefault()
     const loadGpx = this.props.loadGpx.bind(this)
     let files = Array.from(e.target.files)
+    console.log('FILES', files)
     let reader = new FileReader()
     reader.onload = function(e) {
+      console.log('UPLOADING')
       let uniqueId = Math.floor(Math.random() * Number.MAX_SAFE_INTEGER)
       //convert to text
       let text = reader.result
@@ -61,7 +60,8 @@ const mapState = state => {
 }
 
 const mapDispatch = dispatch => ({
-  loadGpx: (data, id, seq) => dispatch(loadGpxThunk(data, id, seq))
+  loadGpx: (data, id, seq, location) =>
+    dispatch(loadGpxThunk(data, id, seq, location))
 })
 
 export default connect(mapState, mapDispatch)(GpxUpload)

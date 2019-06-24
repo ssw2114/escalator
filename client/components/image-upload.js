@@ -3,7 +3,14 @@ import {connect} from 'react-redux'
 import {loadImagesThunk} from '../store/image'
 
 class ImageUpload extends Component {
-  onChange = e => {
+  constructor() {
+    super()
+    this.state = {
+      offset: 'Z'
+    }
+  }
+
+  onUpload = e => {
     e.preventDefault()
     const photos = Array.from(e.target.files)
     let formData = new FormData()
@@ -13,7 +20,7 @@ class ImageUpload extends Component {
       formData.append(i, file)
     })
 
-    this.props.loadImages(formData)
+    this.props.loadImages(formData, this.state.offset)
 
     // let headers = new Headers()
     // headers.append(
@@ -33,23 +40,74 @@ class ImageUpload extends Component {
     // let promises = photos.forEach((file, i) => {
     //   return EXIFP(file).then()
     // }
+  }
 
-    // await photos.forEach(async (file, i) => {
-    //   await EXIF.getData(file, async function() {
-    //     let time = await EXIF.getTag(this, 'DateTimeOriginal')
-    //     file.time = time
-    //     let name = i.toString()
-    //     console.log('post-exif file', file)
-    //     formData.append(name, file)
-    //   })
-    // })
+  zoneChange = e => {
+    event.preventDefault()
+    this.setState({offset: e.target.value})
   }
 
   render() {
+    const offsets = [
+      '-12:00',
+      '-11:00',
+      '-10:00',
+      '-9:30',
+      '-9:00',
+      '-8:00',
+      '-7:00',
+      '-6:00',
+      '-5:00',
+      '-4:00',
+      '-3:30',
+      '-3:00',
+      '-2:00',
+      '-1:00',
+      'UTC',
+      '+1:00',
+      '+2:00',
+      '+3:00',
+      '+3:30',
+      '+4:00',
+      '+4:30',
+      '+5:00',
+      '+5:30',
+      '+5:45',
+      '+6:00',
+      '+6:30',
+      '+7:00',
+      '+8:00',
+      '+8:45',
+      '+9:00',
+      '+9:30',
+      '+10:00',
+      '+10:30',
+      '+11:00',
+      '+12:00',
+      '+12:45',
+      '+13:00',
+      '+14:00'
+    ]
     return (
       <div>
-        <label>Upload Photo</label>
-        <input type="file" onChange={this.onChange} multiple />
+        <label>First, select a UTC Offset:</label>
+        <select value={this.state.offset} onChange={this.zoneChange}>
+          {offsets.map(
+            (offset, idx) =>
+              offset === 'UTC' ? (
+                <option key={idx} value="Z">
+                  {offset}
+                </option>
+              ) : (
+                <option key={idx} value={offset}>
+                  {offset}
+                </option>
+              )
+          )}
+        </select>
+
+        <label>Next, upload images:</label>
+        <input type="file" onChange={this.onUpload} multiple />
       </div>
     )
   }
@@ -65,7 +123,7 @@ const mapState = state => {
 }
 
 const mapDispatch = dispatch => ({
-  loadImages: data => dispatch(loadImagesThunk(data))
+  loadImages: (data, offset) => dispatch(loadImagesThunk(data, offset))
 })
 
 export default connect(mapState, mapDispatch)(ImageUpload)
