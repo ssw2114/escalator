@@ -12,6 +12,7 @@ li {
 label {
   display: block;
   font-size: 16pt;
+  padding: 2rem;
 }
 
 .navbar {
@@ -25,7 +26,18 @@ nav a {
   margin: 2em;
 }
 .upload {
+  display: flex;
   text-align: center;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+input {
+  text-align: center;
+  padding: 0px;
+  margin: 0 auto;
+  width: 170px;
 }
 .triplist {
   text-align: center;
