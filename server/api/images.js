@@ -15,11 +15,11 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_SECRET
 })
 
-router.use(
-  cors({
-    origin: 'http://localhost:3000/image'
-  })
-)
+// router.use(
+//   cors({
+//     origin: 'http://localhost:3000/image'
+//   })
+// )
 
 router.use(formData.parse())
 

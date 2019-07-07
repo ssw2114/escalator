@@ -16,12 +16,6 @@ if (process.env.NODE_ENV === 'test') {
   after('close the session store', () => sessionStore.stopExpiringSessions())
 }
 
-app.use(
-  cors({
-    origin: 'http://localhost:3000'
-  })
-)
-
 app.use(formData.parse())
 
 const createApp = () => {

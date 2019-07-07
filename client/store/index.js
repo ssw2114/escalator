@@ -6,10 +6,16 @@ import image from './image'
 import gpx from './gpx'
 
 const reducer = combineReducers({image, gpx})
-const middleware = composeWithDevTools(
+const devMiddleware = composeWithDevTools(
   applyMiddleware(thunkMiddleware, createLogger({collapsed: true}))
 )
-const store = createStore(reducer, middleware)
+
+const prodMiddleware = composeWithDevTools(applyMiddleware(thunkMiddleware))
+
+const store =
+  process.env.NODE_ENV === 'production'
+    ? createStore(reducer, prodMiddleware)
+    : createStore(reducer, devMiddleware)
 
 export default store
 export * from './image'

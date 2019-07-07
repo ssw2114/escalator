@@ -2,7 +2,7 @@
 
 Escalator is a web application that visualizes the location of photographs relative to gps coordinates on a hike, based on the timestamp in the photos' Exif metadata. After a user uploads photos and a gpx files from their hikes, Escalator will generate an interactive elevation profile chart for each gpx file, which will render photos as the user mouses over the chart.
 
-The application works with .jpeg images and does not require the images to contain location metadata.
+The application works with .jpg images and does not require the images to contain location metadata.
 
 Built with Node.js, PosgreSQL, Sequelize, Express, React, Redux and D3.js
 
