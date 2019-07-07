@@ -14,6 +14,7 @@ const GET_GPX = 'GET_GPX'
 const GET_TRIPS = 'GET_TRIPS'
 const GPX_LOADED = 'GPX_LOADED'
 const GET_LOCATION = 'GET_LOCATION'
+const CLEAR_GPX = 'CLEAR_GPX'
 
 //action creators
 
@@ -34,6 +35,10 @@ const loadedGpx = () => ({
 export const getLocationAction = location => ({
   type: GET_LOCATION,
   location
+})
+
+export const clearGpx = () => ({
+  type: CLEAR_GPX
 })
 //thunks
 
@@ -87,6 +92,8 @@ export default function(state = initialState, action) {
   switch (action.type) {
     case GET_GPX:
       return {...state, loading: false, gpx: action.payload}
+    case CLEAR_GPX:
+      return {...state, loading: true, gpx: ''}
     case GPX_LOADED:
       return {...state, gpxLoaded: true, loading: false}
     case GET_LOCATION:

@@ -1,25 +1,23 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
-import {getGpxThunk} from '../store/gpx'
+import {getGpxThunk, clearGpx} from '../store/gpx'
+import {getImagesThunk} from '../store/image'
 import drawGraph from './elevation-chart-helper'
 
 // const createDataArray = require('../../data/gpx-parser')
 
-import * as d3 from 'd3'
-
 class ElevationChart extends Component {
   componentDidMount() {
-    if (this.props.gpxString.length > 1 && this.props.images.length > 0) {
-      drawGraph(this.props)
-    }
+    let params = new URLSearchParams(document.location.search)
+    let id = params.get('id')
+    this.props.getGpx(id)
+    this.props.getImages()
   }
   componentDidUpdate(prevProps) {
-    if (
-      prevProps.gpxString.length < this.props.gpxString.length ||
-      prevProps.images.length < this.props.images.length
-    ) {
-      drawGraph(this.props)
-    }
+    if (this.props.gpxString) drawGraph(this.props.gpxString, this.props.images)
+  }
+  componentWillUnmount() {
+    this.props.clearGpx()
   }
 
   render() {
@@ -42,4 +40,12 @@ const mapState = state => {
   }
 }
 
-export default connect(mapState)(ElevationChart)
+const mapDispatch = dispatch => {
+  return {
+    getGpx: id => dispatch(getGpxThunk(id)),
+    getImages: () => dispatch(getImagesThunk()),
+    clearGpx: () => dispatch(clearGpx())
+  }
+}
+
+export default connect(mapState, mapDispatch)(ElevationChart)

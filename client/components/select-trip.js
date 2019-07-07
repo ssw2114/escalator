@@ -4,43 +4,30 @@ import {Link} from 'react-router-dom'
 import {getTripsThunk, getGpxThunk, getLocationAction} from '../store/gpx'
 import {getImagesThunk} from '../store/image'
 
-//show trips by unique id
-//link will get images and gpx string, redirect to elevation chart.
-
 class SelectTrip extends Component {
   componentDidMount() {
     this.props.getTrips()
-  }
-  // componentDidUpdate(prevProps) {
-  //   if (prevProps.trips !== this.props.trips) {
-  //     this.props.getTrips()
-  //   }
-  // }
-  loadGpxString(id, location) {
-    this.props.getGpx(id)
     this.props.getImages()
-    this.props.getLocation(location)
   }
+
+  // loadGpxString(id, location) {
+  //   this.props.getGpx(id)
+  //   this.props.getImages()
+  //   this.props.getLocation(location)
+  // }
 
   render() {
     return this.props.loading ? (
       <div>Loading...</div>
     ) : (
-      <div>
+      <div className="triplist">
         <h1>Select a Trip </h1>
-        <ul>
-          {this.props.trips.map(trip => (
-            <li>
-              <Link
-                to="/chart"
-                key={trip.id}
-                onClick={() => this.loadGpxString(trip.uniqueId, trip.location)}
-              >
-                {trip.location}
-              </Link>
-            </li>
-          ))}
-        </ul>
+
+        {this.props.trips.map(trip => (
+          <div key={trip.uniqueId}>
+            <Link to={`/chart?id=${trip.uniqueId}`}>{trip.location}</Link>
+          </div>
+        ))}
       </div>
     )
   }

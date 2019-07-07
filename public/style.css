@@ -1,5 +1,5 @@
 body {
-  font-family: sans-serif;
+  font-family: 'Open Sans Condensed', sans-serif;
 }
 
 a {
@@ -14,21 +14,52 @@ label {
   font-size: 16pt;
 }
 
+.navbar {
+  padding: 3rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+}
 nav a {
   display: inline-block;
   margin: 2em;
 }
-
-.header {
+.upload {
+  text-align: center;
+}
+.triplist {
+  text-align: center;
+}
+.nav-header {
   font-size: 30pt;
   font-weight: bold;
+  padding-right: 20px;
 }
 
-.link {
+.nav-links-container {
+  display: flex;
+  justify-content: space-between;
+}
+.nav-link {
   font-size: 15pt;
+  color: green;
+  font-weight: bold;
+  padding: 1em;
+}
+a:visited {
+  color: green;
 }
 
 form div {
   margin: 1em;
   display: inline-block;
+}
+
+.chart {
+  display: flex;
+  justify-content: center;
+}
+svg {
+  text-align: center;
+  margin-bottom: 100px;
 }

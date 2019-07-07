@@ -3,13 +3,13 @@ import EXIF from 'exif-js'
 
 const {getD3InputArray} = require('../../utils/distanceFunc')
 //props will be GpxString and images (array of objects with imageURL and timestamp)
-const drawGraph = props => {
-  getD3InputArray(props.gpxString, props.images)
+const drawGraph = (gpxString, images) => {
+  getD3InputArray(gpxString, images)
     .then(data => {
       d3.select('.chart > *').remove()
-      const margin = {top: 100, right: 40, bottom: 40, left: 40}
+      const margin = {top: 200, right: 60, bottom: 100, left: 60}
       const width = 960 - margin.left - margin.right
-      const height = 600 - margin.top - margin.bottom
+      const height = 700 - margin.top - margin.bottom
 
       //calculate domain ranges
       const distanceMax = data[data.length - 1].distance
@@ -72,7 +72,7 @@ const drawGraph = props => {
         .append('text')
         .attr(
           'transform',
-          'translate(' + width / 2 + ' ,' + (height + margin.bottom) + ')'
+          'translate(' + width / 2 + ' ,' + (height + 40) + ')'
         )
         .style('text-anchor', 'middle')
         .text('Distance (km)')
@@ -154,7 +154,7 @@ const drawGraph = props => {
                 'translate(' +
                   x(d.distance) +
                   ',' +
-                  y(d.elevation + 100) +
+                  y(d.elevation + 200) +
                   ') rotate(90)'
               )
           } else if (d.orientation === 8) {
@@ -165,7 +165,7 @@ const drawGraph = props => {
                 'translate(' +
                   x(d.distance) +
                   ',' +
-                  y(d.elevation + 100) +
+                  y(d.elevation + 200) +
                   ') rotate(270)'
               )
           } else if (d.orientation === 3) {
@@ -176,7 +176,7 @@ const drawGraph = props => {
                 'translate(' +
                   x(d.distance) +
                   ',' +
-                  y(d.elevation + 100) +
+                  y(d.elevation + 200) +
                   ') rotate(180)'
               )
           } else {
@@ -184,7 +184,7 @@ const drawGraph = props => {
               .select('image')
               .attr(
                 'transform',
-                'translate(' + x(d.distance) + ',' + y(d.elevation + 100) + ')'
+                'translate(' + x(d.distance) + ',' + y(d.elevation + 200) + ')'
               )
           }
 
@@ -192,9 +192,9 @@ const drawGraph = props => {
           focus
             .append('line')
             .attr('class', 'x')
-            .style('stroke', 'blue')
+            .style('stroke', 'black')
             .style('stroke-dasharray', '3,3')
-            .style('opacity', 0.5)
+            .style('opacity', 1)
             .attr('y1', 0)
             .attr('y2', height)
             // .select('.x')

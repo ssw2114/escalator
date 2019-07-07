@@ -89,7 +89,7 @@ class ImageUpload extends Component {
       '+14:00'
     ]
     return (
-      <div>
+      <div className="upload">
         <label>First, select a UTC Offset</label>
         <select value={this.state.offset} onChange={this.zoneChange}>
           {offsets.map(
