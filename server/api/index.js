@@ -2,7 +2,6 @@ const router = require('express').Router()
 require('../../secrets')
 module.exports = router
 
-router.use('/users', require('./users'))
 router.use('/images', require('./images'))
 router.use('/gpx', require('./gpx'))
 
