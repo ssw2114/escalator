@@ -7,10 +7,9 @@ class GpxUpload extends Component {
     e.preventDefault()
     const loadGpx = this.props.loadGpx.bind(this)
     let files = Array.from(e.target.files)
-    console.log('FILES', files)
+
     let reader = new FileReader()
     reader.onload = function() {
-      console.log('UPLOADING')
       let uniqueId = Math.floor(Math.random() * Number.MAX_SAFE_INTEGER)
       //convert to text
       let text = reader.result
@@ -26,16 +25,6 @@ class GpxUpload extends Component {
         end += packageSize
         seq++
       }
-      //convert to array of objs
-
-      // getD3InputArray(text).then(array => {
-      //   console.log(array.length)
-      //   const tenthArrayIdx = Math.floor(array.length / 10)
-      //   // let tenthArray = array.slice(0, array[Math.floor(array.length / 10)])
-      //   let tenthArray = array.slice(0, tenthArrayIdx)
-
-      //   loadGpx(tenthArray)
-      // })
     }
     reader.readAsText(files[0])
   }

@@ -15,7 +15,6 @@ class ImageUpload extends Component {
     e.preventDefault()
     const photos = Array.from(e.target.files)
     let formData = new FormData()
-    // console.log('FIRST FILE:', photos[0])
 
     photos.forEach((file, i) => {
       formData.append(i, file)

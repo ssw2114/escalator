@@ -4,7 +4,6 @@ const {getD3InputArray} = require('../../utils/distanceFunc')
 const drawGraph = (gpxString, images) => {
   getD3InputArray(gpxString, images)
     .then(data => {
-      console.log('data', data)
       d3.select('.chart > *').remove()
       const margin = {top: 200, right: 60, bottom: 100, left: 60}
       const width = 960 - margin.left - margin.right
@@ -166,7 +165,6 @@ const drawGraph = (gpxString, images) => {
           let picWidth = pic.getBoundingClientRect().width
           let picHeight = pic.getBoundingClientRect().height
           if (d.orientation === 6) {
-            console.log('orientation 6')
             focus
               .select('image')
               .attr(
@@ -187,7 +185,6 @@ const drawGraph = (gpxString, images) => {
               )
             // .attr('transform', 'translate(300, ' + y(d.elevation) + ')  ')
           } else if (d.orientation === 8) {
-            console.log('orientation 8')
             focus
               .select('image')
               .attr(
@@ -207,7 +204,6 @@ const drawGraph = (gpxString, images) => {
                   ')'
               )
           } else if (d.orientation === 3) {
-            console.log('Orientation 3')
             focus
               .select('image')
               .attr(

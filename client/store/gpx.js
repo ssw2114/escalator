@@ -64,7 +64,7 @@ export const loadGpxThunk = (string, id, seq) => async dispatch => {
       const reverseGeo = await axios.get(
         `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`
       )
-      console.log('REVERSEGEO', reverseGeo)
+
       let data = reverseGeo.data.address
       location = `${data.village}, ${data.county}, ${data.state}, ${
         data.country

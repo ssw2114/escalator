@@ -43,7 +43,6 @@ const getDistance = (polar1, polar2) => {
 // }
 
 const findTrackpoint = (image, points, start = 0, end = points.length - 1) => {
-  // console.log('start: ', start, 'end: ', end)
   let imgTime = new Date(image.time)
   let mid = start + Math.floor((end - start) / 2)
   const imageTooEarly = imgTime < new Date(points[0].time)
@@ -85,7 +84,6 @@ const getD3InputArray = (gpxString, imageArray) => {
               inputArray.push(trackPoint)
             } else {
               //calculate distance from start
-              // console.log(`lat: ${subsegment.lat}, long: ${subsegment.lon}`)
               accumDistance += getDistance(prevPoint, [
                 subsegment.lat,
                 subsegment.lon,
@@ -105,9 +103,6 @@ const getD3InputArray = (gpxString, imageArray) => {
       //add imageUrl to relevant trackpoint
 
       const spreadScale = Math.floor(inputArray.length / 100)
-      console.log(
-        `spreadScale: ${spreadScale}, arraylength: ${inputArray.length}`
-      )
 
       imageArray.forEach(image => {
         let pointIdx = findTrackpoint(image, inputArray)

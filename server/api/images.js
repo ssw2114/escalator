@@ -34,36 +34,28 @@ router.get('/', async (req, res, next) => {
   }
 })
 router.post('/:offset', (req, res, next) => {
-  // console.log('REQ FILES', JSON.stringify(req.files))
   const values = Object.values(req.files)
 
   let promises = values.map(image => {
-    // console.log(image.exifdata.DateTimeOriginal)
     let buffer = fs.readFileSync(image.path)
-    // console.log('IMAGE:', image)
+
     let parser = EXIFParser.create(buffer)
     let result = parser.parse()
-    console.log('RESULT', result)
+
     let orientation = result.tags.Orientation
-    console.log('ORIENTATION', orientation)
+
     let time = result.tags.DateTimeOriginal
-    console.log('TIME1', time, 'Type:', typeof time)
+
     //specify given timezone
     const withTimeZone = time.toString() + req.params.offset.toString()
     time = new Date(withTimeZone)
 
-    console.log('TIME2', time)
-    // console.log('EXIF', result)
     return cloudinary.uploader.upload(image.path).then(cloudRes => {
-      // console.log('cloudRes', cloudRes)
       return Image.create({
         imageUrl: cloudRes.url,
         time: time.toUTCString(),
         orientation: orientation
-      }).then(
-        // dbResult => console.log('DB RESULT', dbResult),
-        err => console.log(err)
-      )
+      }).then(err => console.log(err))
     })
   })
   Promise.all(promises)
