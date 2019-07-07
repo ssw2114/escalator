@@ -1,11 +1,10 @@
 import * as d3 from 'd3'
-import EXIF from 'exif-js'
 
 const {getD3InputArray} = require('../../utils/distanceFunc')
-//props will be GpxString and images (array of objects with imageURL and timestamp)
 const drawGraph = (gpxString, images) => {
   getD3InputArray(gpxString, images)
     .then(data => {
+      console.log('data', data)
       d3.select('.chart > *').remove()
       const margin = {top: 200, right: 60, bottom: 100, left: 60}
       const width = 960 - margin.left - margin.right
@@ -23,10 +22,10 @@ const drawGraph = (gpxString, images) => {
           }
           return accum
         },
-        [0, 0]
+        [10000, 0]
       )
       const distanceTopRange = distanceMax + 1
-      const elevationTopRange = elevationMax + elevationMax % 50
+      const elevationTopRange = elevationMax + (50 - elevationMax % 50)
 
       const bisectDistance = d3.bisector(function(d) {
         return d.distance
@@ -40,7 +39,7 @@ const drawGraph = (gpxString, images) => {
       const y = d3
         .scaleLinear()
         .range([height, 0])
-        .domain([elevationMin, elevationTopRange])
+        .domain([elevationMin > 50 ? elevationMin - 50 : 0, elevationTopRange])
 
       const line = d3
         .line()
@@ -96,23 +95,38 @@ const drawGraph = (gpxString, images) => {
         .attr('class', 'line')
         .attr('d', line)
 
-      svg
-        .selectAll('.dot')
-        .enter()
-        .append('circle')
-        .attr('class', 'dot')
-        .attr('cx', line.x())
-        .attr('cy', line.y())
-        .attr('r', 3.5)
+      // svg
+      //   .selectAll('.dot')
+      //   .enter()
+      //   .append('circle')
+      //   .attr('class', 'dot')
+      //   .attr('cx', line.x())
+      //   .attr('cy', line.y())
+      //   .attr('r', 3.5)
 
-      //create circle for mouseover
+      //create empty circles to display photo locations
+
+      data.forEach(point => {
+        if (point.startImageCluster) {
+          lineSvg
+            .append('circle')
+            .attr(
+              'transform',
+              'translate(' + x(point.distance) + ',' + y(point.elevation) + ')'
+            )
+            .attr('r', 4) // set the radius
+            .style('stroke', 'red') // set the line colour
+            .style('fill', 'red')
+        }
+      })
+
+      //create filled circle for mouseover
       focus
         .append('circle')
         .attr('class', 'y')
         .style('fill', 'none')
         .style('stroke', 'red')
         .attr('r', 4)
-      // focus.append('image')
 
       //create capture area for mouseover
 
@@ -142,49 +156,84 @@ const drawGraph = (gpxString, images) => {
         if (d.imageUrl) {
           focus
             .append('image')
+            .attr('class', 'pic')
             .attr('xlink:href', d.imageUrl)
-            .attr('image-orientation', 'from-image')
-            .attr('width', '300')
-            .attr('height', '300')
+            .attr('height', '300px')
+            .attr('width', '300px')
+          let pic = d3.select('.pic').node()
+          let picWidth = pic.getBoundingClientRect().width
+          let picHeight = pic.getBoundingClientRect().height
           if (d.orientation === 6) {
+            console.log('orientation 6')
             focus
               .select('image')
               .attr(
                 'transform',
                 'translate(' +
+                  -0.1 * picWidth +
+                  ',' +
+                  -1 * picHeight +
+                  ') translate(' +
                   x(d.distance) +
                   ',' +
-                  y(d.elevation + 200) +
-                  ') rotate(90)'
+                  y(d.elevation) +
+                  ') rotate(90 ' +
+                  picWidth / 2 +
+                  ' ' +
+                  picHeight / 2 +
+                  ')'
               )
+            // .attr('transform', 'translate(300, ' + y(d.elevation) + ')  ')
           } else if (d.orientation === 8) {
+            console.log('orientation 8')
             focus
               .select('image')
               .attr(
                 'transform',
                 'translate(' +
+                  -0.1 * picWidth +
+                  ',' +
+                  -1 * picHeight +
+                  ') translate(' +
                   x(d.distance) +
                   ',' +
-                  y(d.elevation + 200) +
-                  ') rotate(270)'
+                  y(d.elevation) +
+                  ') rotate(270 ' +
+                  picWidth / 2 +
+                  ' ' +
+                  picHeight / 2 +
+                  ')'
               )
           } else if (d.orientation === 3) {
+            console.log('Orientation 3')
             focus
               .select('image')
               .attr(
                 'transform',
-                'translate(' +
+                'translate(0,' +
+                  -1 * picHeight +
+                  ') translate(' +
                   x(d.distance) +
                   ',' +
-                  y(d.elevation + 200) +
-                  ') rotate(180)'
+                  y(d.elevation) +
+                  ') rotate(180 ' +
+                  picWidth / 2 +
+                  ' ' +
+                  picHeight / 2 +
+                  ')'
               )
           } else {
             focus
               .select('image')
               .attr(
                 'transform',
-                'translate(' + x(d.distance) + ',' + y(d.elevation + 200) + ')'
+                'translate(0,' +
+                  -0.9 * picHeight +
+                  ') translate(' +
+                  x(d.distance) +
+                  ', ' +
+                  y(d.elevation) +
+                  ')'
               )
           }
 
@@ -197,7 +246,6 @@ const drawGraph = (gpxString, images) => {
             .style('opacity', 1)
             .attr('y1', 0)
             .attr('y2', height)
-            // .select('.x')
             .attr(
               'transform',
               'translate(' + x(d.distance) + ',' + y(d.elevation) + ')'

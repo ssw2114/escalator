@@ -118,6 +118,7 @@ const getD3InputArray = (gpxString, imageArray) => {
         }
 
         inputArray[pointIdx].imageUrl = image.imageUrl
+        inputArray[pointIdx].startImageCluster = true
         inputArray[pointIdx].orientation = image.orientation
         for (
           let i = pointIdx + 1;
