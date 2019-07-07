@@ -1,7 +1,5 @@
 const router = require('express').Router()
 const Gpx = require('../db/models/gpx')
-const db = require('../db')
-const Sequelize = require('sequelize')
 
 router.get('/', async (req, res, next) => {
   try {

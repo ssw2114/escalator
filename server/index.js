@@ -3,7 +3,6 @@ const express = require('express')
 const morgan = require('morgan')
 const compression = require('compression')
 const session = require('express-session')
-const passport = require('passport')
 const SequelizeStore = require('connect-session-sequelize')(session.Store)
 const db = require('./db')
 const sessionStore = new SequelizeStore({db})
@@ -68,10 +67,7 @@ const createApp = () => {
 }
 
 const startListening = () => {
-  // start listening (and create a 'server' object representing our server)
-  const seçrver = app.listen(PORT, () =>
-    console.log(`Mixing it up on port ${PORT}`)
-  )
+  app.listen(PORT, () => console.log(`Mixing it up on port ${PORT}`))
 }
 
 const syncDb = () => db.sync()

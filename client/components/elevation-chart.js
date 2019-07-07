@@ -4,8 +4,6 @@ import {getGpxThunk, clearGpx} from '../store/gpx'
 import {getImagesThunk} from '../store/image'
 import drawGraph from './elevation-chart-helper'
 
-// const createDataArray = require('../../data/gpx-parser')
-
 class ElevationChart extends Component {
   componentDidMount() {
     let params = new URLSearchParams(document.location.search)
@@ -13,8 +11,10 @@ class ElevationChart extends Component {
     this.props.getGpx(id)
     this.props.getImages()
   }
-  componentDidUpdate(prevProps) {
-    if (this.props.gpxString) drawGraph(this.props.gpxString, this.props.images)
+  componentDidUpdate() {
+    if (this.props.gpxString) {
+      drawGraph(this.props.gpxString, this.props.images)
+    }
   }
   componentWillUnmount() {
     this.props.clearGpx()

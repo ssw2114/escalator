@@ -1,3 +1,4 @@
+/* eslint-disable react/no-array-index-key */
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {loadImagesThunk} from '../store/image'
@@ -21,25 +22,6 @@ class ImageUpload extends Component {
     })
 
     this.props.loadImages(formData, this.state.offset)
-
-    // let headers = new Headers()
-    // headers.append(
-    //   'Authorization',
-    //   'Basic ' + btoa('723314166911458:8-yXh5UHr7jf1Xqu01urqE4KhmU')
-    // )
-    // fetch(`https://api.cloudinary.com/v1_1/di6e6irfj/image/upload`, {
-    //   headers: headers,
-    //   method: 'POST',
-    //   body: formData,
-    //   credentials: 'include'
-    // })
-    //   .then(res => {
-    //     console.log('CLOUD RESPONSE:', res)
-    //   })
-    //   .catch(err => console.log(err))
-    // let promises = photos.forEach((file, i) => {
-    //   return EXIFP(file).then()
-    // }
   }
 
   zoneChange = e => {

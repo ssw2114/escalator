@@ -9,7 +9,7 @@ class GpxUpload extends Component {
     let files = Array.from(e.target.files)
     console.log('FILES', files)
     let reader = new FileReader()
-    reader.onload = function(e) {
+    reader.onload = function() {
       console.log('UPLOADING')
       let uniqueId = Math.floor(Math.random() * Number.MAX_SAFE_INTEGER)
       //convert to text

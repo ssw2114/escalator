@@ -42,8 +42,6 @@ const getDistance = (polar1, polar2) => {
 //   return findTrackpoint(image, points.slice(mid + 1, points.length))
 // }
 
-let counter = 0
-
 const findTrackpoint = (image, points, start = 0, end = points.length - 1) => {
   // console.log('start: ', start, 'end: ', end)
   let imgTime = new Date(image.time)

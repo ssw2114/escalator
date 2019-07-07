@@ -1,5 +1,4 @@
 import axios from 'axios'
-import history from '../history'
 
 /**
  * ACTION TYPES
@@ -22,11 +21,9 @@ const gotImages = payload => ({type: GET_IMAGES, payload})
 /**
  * THUNK CREATORS
  */
-export const loadImagesThunk = (formData, offset) => async dispatch => {
+export const loadImagesThunk = (formData, offset) => async () => {
   try {
-    console.log('LOAD IMAGES THUNK DISPATCHED.  offset:', offset)
-    console.dir('formdata:', formData)
-    const res = await axios.post(`api/images/${offset}`, formData)
+    await axios.post(`api/images/${offset}`, formData)
   } catch (err) {
     console.error(err)
   }

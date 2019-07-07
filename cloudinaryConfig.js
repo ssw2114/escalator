@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 const cloudinary = require('cloudinary')
 const uploader = require('cloudinary')
 

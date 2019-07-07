@@ -109,14 +109,16 @@ const drawGraph = (gpxString, images) => {
       data.forEach(point => {
         if (point.startImageCluster) {
           lineSvg
-            .append('circle')
+            .append('text')
+            .style('fill', 'red') // fill the text with the colour black
             .attr(
               'transform',
               'translate(' + x(point.distance) + ',' + y(point.elevation) + ')'
-            )
-            .attr('r', 4) // set the radius
-            .style('stroke', 'red') // set the line colour
-            .style('fill', 'red')
+            ) // set y position of bottom of text
+            .attr('dy', '.35em')
+            .attr('font-weight', 'bold')
+            .attr('text-anchor', 'middle') // set anchor y justification
+            .text('X')
         }
       })
 

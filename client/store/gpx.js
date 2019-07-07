@@ -57,6 +57,7 @@ export const loadGpxThunk = (string, id, seq) => async dispatch => {
     //regex search for lat and lon
     let location = ''
     if (seq === 1) {
+      // eslint-disable-next-line no-unused-vars
       const [_, lat, lon] = string.match(
         /trkpt lat="([-.\d]+)" lon="([-.\d]+)"/
       )

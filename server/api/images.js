@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 const router = require('express').Router()
 const cloudinary = require('cloudinary')
 const formData = require('express-form-data')
@@ -7,8 +8,6 @@ const Gpx = require('../db/models/gpx')
 const EXIFParser = require('exif-parser')
 const fs = require('fs')
 require('../../secrets')
-
-//helper to convert timezone
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_NAME,
