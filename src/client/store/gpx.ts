@@ -16,6 +16,26 @@ const GPX_LOADED = 'GPX_LOADED'
 const GET_LOCATION = 'GET_LOCATION'
 const CLEAR_GPX = 'CLEAR_GPX'
 
+//types
+interface Trip {
+  location: String
+  id: Number
+  uniqueId: Number
+}
+interface GetGpxAction {
+  type: typeof GET_GPX
+  payload: String
+}
+interface GetTripsAction {
+  type: typeof GET_TRIPS
+  payload: Trip[]
+}
+interface GpxLoadedAction {
+  type: typeof GPX_LOADED
+}
+interface GetLocationAction {}
+interface ClearGpxAction {}
+
 //action creators
 
 const gotGpx = payload => ({

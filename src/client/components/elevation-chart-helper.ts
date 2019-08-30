@@ -1,7 +1,8 @@
 import * as d3 from 'd3'
+import {Image} from '../store/image'
 
 const {getD3InputArray} = require('../../utils/distanceFunc')
-const drawGraph = (gpxString, images) => {
+const drawGraph = (gpxString: String, images: Image[]) => {
   getD3InputArray(gpxString, images)
     .then(data => {
       d3.select('.chart > *').remove()

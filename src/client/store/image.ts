@@ -5,6 +5,25 @@ import axios from 'axios'
  */
 const GET_IMAGES = 'GET_IMAGES'
 
+
+//types
+
+export interface Image {
+  time: string
+  imageUrl: string
+  orientation: number
+}
+
+interface ImageState {
+  images: Image[]
+  loading: Boolean
+}
+
+interface GetImagesAction {
+  type: typeof GET_IMAGES
+  payload: Image[]
+}
+type ImageActionTypes = GetImagesAction
 /**
  * INITIAL STATE
  */
@@ -16,12 +35,15 @@ const initialState = {
 /**
  * ACTION CREATORS
  */
-const gotImages = payload => ({type: GET_IMAGES, payload})
+const gotImages = (payload: Image[]) => ({type: GET_IMAGES, payload})
 
 /**
  * THUNK CREATORS
  */
-export const loadImagesThunk = (formData, offset) => async () => {
+export const loadImagesThunk = (
+  formData: Object,
+  offset: String
+) => async () => {
   try {
     await axios.post(`api/images/${offset}`, formData)
   } catch (err) {
@@ -41,7 +63,10 @@ export const getImagesThunk = () => async dispatch => {
 /**
  * REDUCER
  */
-export default function(state = initialState, action) {
+export default function imageReducer(
+  state = initialState,
+  action: ImageActionTypes
+): ImageState {
   switch (action.type) {
     case GET_IMAGES:
       return {...state, images: action.payload, loading: false}
