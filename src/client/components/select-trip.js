@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
-import {getTripsThunk, getGpxThunk, getLocationAction} from '../store/gpx'
+import {getTripsThunk, getGpxThunk} from '../store/gpx'
 import {getImagesThunk} from '../store/image'
 
 class SelectTrip extends Component {
@@ -9,12 +9,6 @@ class SelectTrip extends Component {
     this.props.getTrips()
     this.props.getImages()
   }
-
-  // loadGpxString(id, location) {
-  //   this.props.getGpx(id)
-  //   this.props.getImages()
-  //   this.props.getLocation(location)
-  // }
 
   render() {
     return this.props.loading ? (
@@ -42,8 +36,7 @@ const mapState = state => {
 const mapDispatch = dispatch => ({
   getTrips: () => dispatch(getTripsThunk()),
   getGpx: id => dispatch(getGpxThunk(id)),
-  getImages: () => dispatch(getImagesThunk()),
-  getLocation: location => dispatch(getLocationAction(location))
+  getImages: () => dispatch(getImagesThunk())
 })
 
 export default connect(mapState, mapDispatch)(SelectTrip)

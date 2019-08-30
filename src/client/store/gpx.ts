@@ -33,7 +33,7 @@ interface GetTripsAction {
 interface GpxLoadedAction {
   type: typeof GPX_LOADED
 }
-interface GetLocationAction {}
+
 interface ClearGpxAction {}
 
 //action creators
@@ -52,10 +52,6 @@ const loadedGpx = () => ({
   type: GPX_LOADED
 })
 
-export const getLocationAction = location => ({
-  type: GET_LOCATION,
-  location
-})
 
 export const clearGpx = () => ({
   type: CLEAR_GPX
