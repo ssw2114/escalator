@@ -72,7 +72,9 @@ input {
   font-weight: bold;
   padding: 1em;
 }
-a:visited {
+a:visited,
+a:link,
+a:hover {
   color: green;
 }
 

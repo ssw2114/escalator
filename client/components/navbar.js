@@ -6,9 +6,9 @@ const Navbar = () => (
     <Link to="/">
       <div className="nav-header">ESCALATOR</div>
     </Link>
-    <div className="nav-link">
-      <Link to="/selectTrip">My Trips</Link>
-    </div>
+    <Link to="/selectTrip">
+      <div className="nav-link">My Trips</div>
+    </Link>
     <Link to="/gpx">
       <div className="nav-link">Upload GPX</div>
     </Link>
