@@ -20,3 +20,4 @@ const store =
 export default store
 export * from './image'
 export * from './gpx'
+export type AppState = ReturnType<typeof reducer>

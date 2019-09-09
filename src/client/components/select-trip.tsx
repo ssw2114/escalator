@@ -1,10 +1,12 @@
 import React, {Component} from 'react'
+import {Dispatch} from 'redux'
 import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
 import {getTripsThunk, getGpxThunk} from '../store/gpx'
 import {getImagesThunk} from '../store/image'
+import {AppState} from '../store'
 
-class SelectTrip extends Component {
+class SelectTrip extends Component<any> {
   componentDidMount() {
     this.props.getTrips()
     this.props.getImages()
@@ -27,13 +29,13 @@ class SelectTrip extends Component {
   }
 }
 
-const mapState = state => {
+const mapState = (state: AppState) => {
   return {
     trips: state.gpx.trips
   }
 }
 
-const mapDispatch = dispatch => ({
+const mapDispatch = (dispatch: Dispatch<any>) => ({
   getTrips: () => dispatch(getTripsThunk()),
   getGpx: id => dispatch(getGpxThunk(id)),
   getImages: () => dispatch(getImagesThunk())

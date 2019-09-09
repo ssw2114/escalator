@@ -1,5 +1,7 @@
-const router = require('express').Router()
-const Gpx = require('../db/models/gpx')
+import Router from ('express')
+let router = Router()
+import Gpx = require('../db/models/gpx')
+import {Request, Response, NextFunction} = require('express')
 
 router.get('/', async (req, res, next) => {
   try {

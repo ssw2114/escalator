@@ -4,8 +4,7 @@ let initialState = {
   gpx: '',
   trips: [],
   loading: true,
-  gpxLoaded: false,
-  location: ''
+  gpxLoaded: false
 }
 
 //actions
@@ -13,14 +12,20 @@ let initialState = {
 const GET_GPX = 'GET_GPX'
 const GET_TRIPS = 'GET_TRIPS'
 const GPX_LOADED = 'GPX_LOADED'
-const GET_LOCATION = 'GET_LOCATION'
 const CLEAR_GPX = 'CLEAR_GPX'
 
 //types
+
 interface Trip {
   location: String
   id: Number
   uniqueId: Number
+}
+interface TripState {
+  gpx: String
+  trips: Trip[]
+  loading: Boolean
+  gpxLoaded: Boolean
 }
 interface GetGpxAction {
   type: typeof GET_GPX
@@ -34,7 +39,15 @@ interface GpxLoadedAction {
   type: typeof GPX_LOADED
 }
 
-interface ClearGpxAction {}
+interface ClearGpxAction {
+  type: typeof CLEAR_GPX
+}
+
+type GpxActionTypes =
+  | GetGpxAction
+  | GetTripsAction
+  | GpxLoadedAction
+  | ClearGpxAction
 
 //action creators
 
@@ -52,7 +65,6 @@ const loadedGpx = () => ({
   type: GPX_LOADED
 })
 
-
 export const clearGpx = () => ({
   type: CLEAR_GPX
 })
@@ -67,7 +79,11 @@ export const getTripsThunk = () => async dispatch => {
   }
 }
 
-export const loadGpxThunk = (string, id, seq) => async dispatch => {
+export const loadGpxThunk = (
+  string: String,
+  id: Number,
+  seq: Number
+) => async dispatch => {
   try {
     //if seq is one, get location
     //regex search for lat and lon
@@ -96,7 +112,7 @@ export const loadGpxThunk = (string, id, seq) => async dispatch => {
   }
 }
 
-export const getGpxThunk = id => async dispatch => {
+export const getGpxThunk = (id: Number) => async dispatch => {
   try {
     const {data} = await axios.get(`api/gpx/${id}`)
     dispatch(gotGpx(data))
@@ -105,7 +121,10 @@ export const getGpxThunk = id => async dispatch => {
   }
 }
 
-export default function(state = initialState, action) {
+export default function(
+  state = initialState,
+  action: GpxActionTypes
+): TripState {
   switch (action.type) {
     case GET_GPX:
       return {...state, loading: false, gpx: action.payload}
@@ -113,8 +132,6 @@ export default function(state = initialState, action) {
       return {...state, loading: true, gpx: ''}
     case GPX_LOADED:
       return {...state, gpxLoaded: true, loading: false}
-    case GET_LOCATION:
-      return {...state, location: action.location, loading: false}
     case GET_TRIPS:
       return {...state, trips: action.payload, loading: false}
     default:
