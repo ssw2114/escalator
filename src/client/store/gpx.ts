@@ -43,7 +43,7 @@ interface ClearGpxAction {
   type: typeof CLEAR_GPX
 }
 
-type GpxActionTypes =
+type GpxAction =
   | GetGpxAction
   | GetTripsAction
   | GpxLoadedAction
@@ -92,7 +92,7 @@ export const loadGpxThunk = (
       // eslint-disable-next-line no-unused-vars
       const [_, lat, lon] = string.match(
         /trkpt lat="([-.\d]+)" lon="([-.\d]+)"/
-      )
+      ) || [null, null, null]
       const reverseGeo = await axios.get(
         `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`
       )
@@ -121,10 +121,7 @@ export const getGpxThunk = (id: Number) => async dispatch => {
   }
 }
 
-export default function(
-  state = initialState,
-  action: GpxActionTypes
-): TripState {
+export default function(state = initialState, action: GpxAction): TripState {
   switch (action.type) {
     case GET_GPX:
       return {...state, loading: false, gpx: action.payload}

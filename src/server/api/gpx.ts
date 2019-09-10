@@ -1,7 +1,7 @@
-import Router from ('express')
+import Router from 'express'
 let router = Router()
-import Gpx = require('../db/models/gpx')
-import {Request, Response, NextFunction} = require('express')
+import Gpx from '../db/models/gpx'
+import {Request, Response, NextFunction} from 'express'
 
 router.get('/', async (req, res, next) => {
   try {
