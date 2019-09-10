@@ -1,5 +1,5 @@
-var db = require('./db');
+var db = require('./db')
 // register models
-require('./models');
-module.exports = db;
+require('./models')
+module.exports = db
 //# sourceMappingURL=index.js.map

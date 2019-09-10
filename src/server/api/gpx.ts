@@ -3,7 +3,7 @@ let router = Router()
 import Gpx from '../db/models/gpx'
 import {Request, Response, NextFunction} from 'express'
 
-router.get('/', async (req, res, next) => {
+router.get('/', async (req: Request, res: Response, next: NextFunction) => {
   try {
     let results = await Gpx.findAll({
       where: {sequence: 1},
@@ -16,7 +16,7 @@ router.get('/', async (req, res, next) => {
   }
 })
 
-router.get('/:id', async (req, res, next) => {
+router.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
   try {
     const id = req.params.id
     let gpxBatches = await Gpx.findAll({
@@ -36,7 +36,7 @@ router.get('/:id', async (req, res, next) => {
   }
 })
 
-router.post('/', async (req, res, next) => {
+router.post('/', async (req: Request, res: Response, next: NextFunction) => {
   try {
     const {string, id, seq, location} = req.body
     let gpxEntry = await Gpx.create({
@@ -55,4 +55,4 @@ router.post('/', async (req, res, next) => {
   }
 })
 
-module.exports = router
+export default router

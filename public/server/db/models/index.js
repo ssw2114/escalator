@@ -1,6 +1,6 @@
-var User = require('./user');
-var Image = require('./image');
-var Gpx = require('./gpx');
+var User = require('./user')
+var Image = require('./image')
+var Gpx = require('./gpx')
 /**
  * If we had any associations to make, this would be a great place to put them!
  * ex. if we had another model called BlogPost, we might say:
@@ -14,8 +14,8 @@ var Gpx = require('./gpx');
  * instead of: const User = require('../db/models/user')
  */
 module.exports = {
-    User: User,
-    Image: Image,
-    Gpx: Gpx
-};
+  User: User,
+  Image: Image,
+  Gpx: Gpx
+}
 //# sourceMappingURL=index.js.map
