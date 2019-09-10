@@ -1,21 +1,22 @@
-const path = require('path')
-const express = require('express')
-const morgan = require('morgan')
-const compression = require('compression')
-const session = require('express-session')
-const SequelizeStore = require('connect-session-sequelize')(session.Store)
-const db = require('./db')
+import path from 'path'
+import express from 'express'
+import morgan from 'morgan'
+import compression from 'compression'
+import session from 'express-session'
+import connectStore from 'connect-session-sequelize'
+const SequelizeStore = connectStore(session.Store)
+import db from './db'
 const sessionStore = new SequelizeStore({db})
 const PORT = process.env.PORT || 8080
 const app = express()
-const formData = require('express-form-data')
-const cors = require('cors')
+import formData from 'express-form-data'
+import {ErrorWithStatus} from './api'
+import {Request, Response, NextFunction} from 'express'
+export default app
 
-module.exports = app
-
-if (process.env.NODE_ENV === 'test') {
-  after('close the session store', () => sessionStore.stopExpiringSessions())
-}
+// if (process.env.NODE_ENV === 'test') {
+//   after('close the session store', () => sessionStore.stopExpiringSessions())
+// }
 
 app.use(formData.parse())
 
@@ -38,9 +39,9 @@ const createApp = () => {
   app.use(express.static(path.join(__dirname, '..', 'public')))
 
   // any remaining requests with an extension (.js, .css, etc.) send 404
-  app.use((req, res, next) => {
+  app.use((req: Request, res: Response, next: NextFunction) => {
     if (path.extname(req.path).length) {
-      const err = new Error('Not found')
+      const err = new ErrorWithStatus('Not found')
       err.status = 404
       next(err)
     } else {
@@ -49,16 +50,20 @@ const createApp = () => {
   })
 
   // sends index.html
-  app.use('*', (req, res) => {
+  app.use('*', (req: Request, res: Response) => {
     res.sendFile(path.join(__dirname, '..', 'public/index.html'))
   })
 
   // error handling endware
-  app.use((err, req, res, next) => {
-    console.error(err)
-    console.error(err.stack)
-    res.status(err.status || 500).send(err.message || 'Internal server error.')
-  })
+  app.use(
+    (err: ErrorWithStatus, req: Request, res: Response, next: NextFunction) => {
+      console.error(err)
+      console.error(err.stack)
+      res
+        .status(err.status || 500)
+        .send(err.message || 'Internal server error.')
+    }
+  )
 }
 
 const startListening = () => {

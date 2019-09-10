@@ -1,1 +1,0 @@
-{"version":3,"file":"index.js","sourceRoot":"","sources":["../../../../src/server/db/models/index.js"],"names":[],"mappings":"AAAA,IAAM,IAAI,GAAG,OAAO,CAAC,QAAQ,CAAC,CAAA;AAC9B,IAAM,KAAK,GAAG,OAAO,CAAC,SAAS,CAAC,CAAA;AAChC,IAAM,GAAG,GAAG,OAAO,CAAC,OAAO,CAAC,CAAA;AAE5B;;;;;GAKG;AAEH;;;;;GAKG;AACH,MAAM,CAAC,OAAO,GAAG;IACf,IAAI,MAAA;IACJ,KAAK,OAAA;IACL,GAAG,KAAA;CACJ,CAAA"}
